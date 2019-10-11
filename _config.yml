@@ -4,7 +4,7 @@ description: 'DevOps and Automation focused blog that enforces the need to limit
 url: 'https://mattzone.github.io'
 baseurl: 'https://mattzone.github.io'
 google_analytics: 'UA-149875063-1'
-disqus_shortname: 'mattzone'
+disqus_shortname: 'mattzone-github-io'
 
 author:
   name: 'Matthew Palmer'
