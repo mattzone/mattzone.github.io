@@ -10,11 +10,13 @@ Automation for simple, self-hosted solutions
 [Ansible](#Ansible) - [Terraform](#Terraform)
 
 ## A "self-hosted" time bomb
+
 When working on a self hosted solution, or just having a small server rack in your basement, you are taking a step towards having a "production" environment that must care and feed for. In many of the posts you see on https://reddit.com/r/homelab or https://reddit.com/r/selfhosted, these are one-off solutions or designs with very little in the way of repeatability. This is not to say that all solutions are singleton, manual installs, but there is a clear lack of an automation platform for these self hosted installs. When it comes down to the grit of the issue, people tend to put off the repeatability of their own production, as it never has the level of consumers that other services in the wild expect.
 
 If you look at self hosted this way, it will be a difficult path to maintain and, for many, the reason they stop.
 
 Let's say you spend a full week of time setting up every single install of every server and service you would ever need;
+
 - plex
 - unifi
 - couchpotato
@@ -30,19 +32,21 @@ I shouldn't have to mention the importance of backups, so most of the sensitive 
 Ansible and Terraform are really aimed for the enterprise, but they have very real world applications that can be ported into even the most modest of home lab stacks. It makes the initial stand-up, and even the configuration, a trivial process. It not only brings the benefit of disaster recovery by having declarative manifests of what is needed, but it also allows for the inital standup to be tweaked without making live changes with very little insight into the changes that could occur.
 
 ![ansible](../../assets/ansible_logo.png)
-## Ansible
 
+## Ansible
 
 Ansible is an automation tool, directly targeted at IT automation. When you think a typical operations center, Ansible would probably be a somewhat common occurrence for automating infrastructure and configuration.
 
 At a high level, Ansible works off the concept of inventory, modules, tasks and playbooks to wrap it together. I will be mainly focusing on the ansible-playbooks as a way to holistically explain everything together.
 An example playbook will have the following structure in most cases:
+
 ```yaml
 - hosts: myhost
   tasks:
   - name: do something 1
   - name: do something 2
 ```
+
 This example, while not actually doing anything, would target any inventory named `myhost` and run the following two tasks on the host. There are a bit more configuration when running on a remote host, and for this overview I won't go into too much detail, but there will be documentation in the [reference links below](#Reference)
 
 Basing off our example of a dockerized approach to self-hosted containers, we could start off with the need to rebuild our wireless controller for our access points, in this case I use a common approach with unifi and Ubiquity.
@@ -78,11 +82,13 @@ Basing off our example of a dockerized approach to self-hosted containers, we co
 In this example, I am running the following on my local system, denoted by the target `hosts: localhost`. The `become: no` can allow a command to be run as a different target user, so if this was running on my docker-box, and I wanted the command to execute under a docker user, I could then set this to yes, and set a `become_user: docker`. This will be [linked below](#Reference)
 The next section is where the bulk operations happen, and these are called tasks. Each task has a human-readable `name` field which should be used to briefly explain the operation that takes place.
 Next, the task outlines exactly what happens. Let us take the first task:
+
 ``` yaml
 - name: Verify Docker Module for Python
   pip:
     name: docker
 ```
+
 All this is doing is using the pip module (python package management) to install/verify that `docker` is installed. This equates to a user running `pip install docker` on the command line.
 
 ``` yaml
@@ -90,6 +96,7 @@ All this is doing is using the pip module (python package management) to install
   docker_volume:
     name: unifi
 ```
+
 This task is setting up a docker volume with the name `unifi` for persistence. There is obviously a bit more that could go into backing up this volume, or mounting a target NAS to the docker volume directory, but let's assume this is just a proof of concept, and this playbook can be expanded as much as needed.
 
 ```yaml
@@ -110,7 +117,9 @@ This task is setting up a docker volume with the name `unifi` for persistence. T
     - "8880:8880"
     - "6789:6789"
 ```
+
 This is where the most information comes into play. The following task will pull down the `image` referenced, set a few flags on the command (e.g. restart, volumes and ports) and run it. While it seems like a lot, it is much easier to have this documented in code, rather than typing out the full docker command:
+
 ```bash
 docker run -d --restart always \
   -v unifi:/unifi \
@@ -126,6 +135,7 @@ docker run -d --restart always \
 ```
 
 Now this is a simplistic example, but here is a quick output of the example run of this playbook:
+
 ``` shell
  [WARNING]: No inventory was parsed, only implicit localhost is available
 
@@ -155,6 +165,7 @@ localhost                  : ok=4    changed=2    unreachable=0    failed=0    s
 Ansible really shines in the Configuration and Host space where you have dozens, if not hundreds, of hosts that all are running a targeted setup. It allows for quick fan-out configuration changes on multiple hosts within your Ansible-managed inventory. It also allows for different task playbooks for different host groups, so you can send targeted commands for AMD servers vs Intel and other situations that could beneift from this targetted approach. In practice, it doesn't deal well with management of the current state of systems. It does give very robust feedback on command execution and success, but if a command was to fail a roll-out, it would be a manual process to resolve the error on the target host.
 
 ![terraform](../../assets/terraform_logo.png)
+
 ## Terraform
 
 Terraform, like Ansible, is another Automation tool that is targeted for cloud infrasturture management. It is touted as an "orchestration" engine for infrastructure, and is also much newer than Ansible. As of writing this, the current Terraform version is only v0.12.13.
@@ -162,10 +173,12 @@ Terraform, like Ansible, is another Automation tool that is targeted for cloud i
 Where Terraform really shines is in maintaining state after creation. It keeps an output of the state, in `terraform.tfstate` of everything created, and the current state of each resource.
 
 In a terraform execution, there are 2 primary pieces that can be observed
+
 - Providers
 - Resources
 
 Providers are the main software or platform and Resources are the definitions of what is to be created. Lets take the same example of unifi in Ansible, and translate it to a terraform file:
+
 ```hcl
 provider "docker" {}
 
@@ -184,7 +197,7 @@ resource "docker_container" "unifi" {
   restart = "always"
   volumes {
     volume_name    = docker_volume.unifi.name
-    container_path = "/unifi"    
+    container_path = "/unifi"
   }
 
   ports {
@@ -228,6 +241,7 @@ The way terraform works, is that a provider, in this case [Docker](https://www.t
 On first glance, this file is much more verbose to accomplish the same result as Ansible, and you would be right in that observation. Terraform uses its own language called HCL or Hashicorp configuration language. It uses a format that is similar to json in a way, but also tailored specifically for Terraform. In Terraform v0.12, it also can directly reference variables without the original "${}" syntax that was needed in previous versions.
 
 In the example above, we are expecting the same end state:
+
 ```HCL
 provider "docker" {}
 
@@ -236,6 +250,7 @@ variable "unifi_container" {
   default = "linuxserver/unifi-controller:5.6.42-ls54"
 }
 ```
+
 This code block adds the boilerplate provider definition, as well as a variable definition for the unifi_container image name. No resources are created in this block.
 
 ```HCL
@@ -243,6 +258,7 @@ resource "docker_volume" "unifi" {
   name = "unifi"
 }
 ```
+
 In this resource, we are declaring a docker volume. This is, again, synonymous with a user executing `docker volume create unifi`. The end state of this will be a docker volume named `unifi`
 
 ```HCL
@@ -252,7 +268,7 @@ resource "docker_container" "unifi" {
   restart = "always"
   volumes {
     volume_name    = docker_volume.unifi.name
-    container_path = "/unifi"    
+    container_path = "/unifi"
   }
 
   ports {
@@ -399,19 +415,24 @@ Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
 ### Terraform Summary
+
 Terraform is a great tool when dealing with large infrastructure that has many interdependent parts. It can easily reference direct output of one resource as input to another and can even verify the state on additional apply. Terraform is also very state-dependent, and can import other pieces into it's "state" to avoid conflicting results.
 
 ## Summary
+
 When it comes to a self hosted solution, or even a cloud solution, consistency is key. If you cannot have a consistent end state for your project, you will spend more time on maintenance and setup, than actually being able to enjoy what you have built. I personally have chosen Terraform for my own management of servers and services for the state management alone, but both tools have their benefits of use.
 The primary takeaway should be that no matter the setup, you should have some way to roll out changes in a mature fashion.
 
-
 ### Reference
+
 #### Ansible Reference
+
 [Ansible - Getting Started](https://docs.ansible.com/ansible/latest/network/getting_started/basic_concepts.html) - Link to getting started guide with Ansible, and some basic concepts to understand the syntax
 
 [Ansible - become documentaion](https://docs.ansible.com/ansible/latest/user_guide/become.html#become-connection-variables) - Documentation of Ansible privilege escalation
+
 #### Terraform Reference
+
 [Terraform - Getting Started](https://www.terraform.io/intro/index.html) - Overview on terraform and further links to providers and concepts.
 [Terraform - Providers](https://www.terraform.io/docs/providers/index.html) - List of all Terraform providers
 [Hashicorp - HCL](https://github.com/hashicorp/hcl) - HCL git repository
