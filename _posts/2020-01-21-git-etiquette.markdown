@@ -121,7 +121,7 @@ The issue we can get into very quickly is when branches become long lived, and e
 
 ### Trunking
 
-~[trunking](../../assets/trunking.png)
+![trunking](../../assets/trunking.png)
 
 This approach was popularized by Google, and for good reason. It takes the concept of `master` as the source of truth, and the assumed "trunk" of the git tree. All commits are made directly to the trunk branch, and releases are "cut" from the trunk.
 
@@ -200,12 +200,21 @@ While not directly requirements for git, these files are invaluable in a Contain
 ### Reference
 
 [Git](https://git-scm.com/)
+
 [Git Strategies](https://blog.developer.atlassian.com/pull-request-merge-strategies-the-great-debate/) - Atlassian take on strategies (great visuals)
+
 [Signing commits](https://help.github.com/en/github/authenticating-to-github/signing-commits) - Github's take on GPG keys
+
 [Semantic Versioning](https://semver.org/) - Semver standard
+
 [Gitignore](https://github.com/github/gitignore) - Github examples for language specific .gitignores
+
 [EditorConfig](https://editorconfig.org/)
+
 [CONTRIBUTING.md example from Atom.io](https://github.com/atom/atom/blob/master/CONTRIBUTING.md)
+
 [Licensing a Repository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository#disclaimer) - Licensing support for OpenSource
+
 [Docker Documentation](https://docs.docker.com/)
+
 [Docker-Compose](https://docs.docker.com/compose/)
