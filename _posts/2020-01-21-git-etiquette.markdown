@@ -21,15 +21,12 @@ While git, like every tool, has a very loose user guide, there are still many be
 
 It may be alluring to run a quick command to add your files and commit them all at once, but what if this adds files you **don't** want public?
 
-<details>
-  <summary> Code gore warning</summary>
 ```bash
 #!/usr/bin/env bash
 git add *
 git commit -m '<USER NAME> Auto push change'
 git push -f origin master
 ```
-</details>
 
 The above is an actual code example that a fellow developer had aliased out to his local shell and used to streamline his coding commits.
 
