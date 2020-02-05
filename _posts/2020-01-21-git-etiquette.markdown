@@ -85,7 +85,9 @@ A better approach would be to simply remove the `-f` flag to allow git to manage
 
 The few reasons that force **should** be used must also be documented.
 
-In general, if there is an emergency situation where code that was broken was pushed to a release stage, `git push --force` may be appropriate.
+One reason to use force is to clean up old history of commits that may contain sensitive information. If code is already on the remote server, and you need to remove the sensitive commits from days or even weeks ago, the only way to do so is to clean the history locally with a rebase, which will ultimately require a final `git push --force`.
+
+Another reason could be if there is an emergency situation where code that was broken was pushed to a release stage, `git push --force` may be appropriate.
 
 *However*, This can only be done safely if you are the last one to commit to this release branch, and you can verify no other users will commit/pull during this time. If these both are true, a forced commit to fix a breaking change could be done. Even if a small commit gets through in this time, it is best to **NOT** force push, and instead consider it a hot-fix that follows the standard merge procedures.
 
