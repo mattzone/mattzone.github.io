@@ -1,8 +1,8 @@
 # Site settings
 title: Blog | Matthew Palmer
 description: 'DevOps and Automation focused blog that enforces the need to limit manual work.'
-url: 'https://matt-palmer-tfs.github.io'
-baseurl: 'https://matt-palmer-tfs.github.io'
+url: 'https://matthew-palmer.github.io'
+baseurl: 'https://matthew-palmer.github.io'
 google_analytics: 'UA-149875063-1'
 disqus_shortname: 'mattzone-github-io'
 
@@ -11,7 +11,7 @@ author:
   email: 
   twitter_username: Hatebringer_
   facebook_username: 
-  github_username:  matt-palmer-tfs
+  github_username:  matthew-palmer
   linkedin_username:  matthew-palmer-968088b1
 
 defaults:
