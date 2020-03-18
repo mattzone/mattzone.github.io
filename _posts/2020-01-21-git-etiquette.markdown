@@ -3,7 +3,7 @@ title:  "Git Ettiquette"
 categories: [git, docker]
 tags: [git, best-practice, standards, github, gitlab]
 ---
-Automation for simple, self-hosted solutions
+Git is a tool, lets try to use it like one.
 
 ![git-logo](../../assets/git-logo.jpg)
 
