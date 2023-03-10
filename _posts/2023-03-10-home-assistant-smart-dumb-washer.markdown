@@ -107,6 +107,7 @@ Or so I thought...
 Now the first few runs of this automation actually went great, but it didn't allow for much in terms of additional automation. So I did a bit of research and found another type of sensor that you can use. Ones that you can assign a value to with templates.
 
 ```yaml
+{% raw %}
 - platform: template
   sensors:
     washer_status:
@@ -120,6 +121,7 @@ Now the first few runs of this automation actually went great, but it didn't all
         {% else %}
           Off
         {% endif %}
+{% endraw %}
 ```
 Since these are not self service in the UI, they need to be added directly to your [home-assistant configuration.yaml](https://www.home-assistant.io/docs/configuration/) as a sensor block.
 
