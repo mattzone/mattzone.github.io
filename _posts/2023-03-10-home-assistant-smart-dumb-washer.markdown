@@ -56,7 +56,7 @@ With the Current Consumption, however, Idle was sitting right at 0.4W, but durin
 
 Now since I had absolutely no idea how to make this work as expected, I thought just jamming the details into an Automation would work. And at first it seemed to work just fine: 
 
-```
+```yaml
 alias: Washer Automation
 description: "Notify me on Washer complete!"
 mode: single
@@ -78,7 +78,7 @@ action:
 
 A quick run down on what this automation is actually doing:
 
-```
+```yaml
 trigger:
   - type: power
     platform: device
@@ -89,7 +89,7 @@ trigger:
 
 The trigger is what causes the automation to fire, so in this example, the automation will fire whenever the washer plug consumption sensor drops below 5W.
 
-```
+```yaml
 action:
   - service: notify.alexa_echo_show
     data:
@@ -106,7 +106,7 @@ Or so I thought...
 
 Now the first few runs of this automation actually went great, but it didn't allow for much in terms of additional automation. So I did a bit of research and found another type of sensor that you can use. Ones that you can assign a value to with templates.
 
-```
+```yaml
 - platform: template
   sensors:
     washer_status:
@@ -129,7 +129,7 @@ Now I had a sensor with meaningful state that I could also read for transition s
 
 Although it is not the cleanest Automation, here is the current Automation for My Washer complete cycle:
 
-```
+```yaml
 alias: Washer Finished
 description: "Run automation if Washer status transisitons from Running"
 trigger:
@@ -195,7 +195,7 @@ mode: single
 
 A few new toggles here, to make the automation a bit more noticable: 
 
-```
+```yaml
 trigger:
   - platform: state
     entity_id:
@@ -210,7 +210,7 @@ trigger:
 Rather than the automation determining the washer state, the sensor now just is assigned the value that it should be, so if the sensor switches **FROM** the Running state, that should indicate the washer is complete. It otherwise will ignore a switch **TO** the Running state.
 
 
-```
+```yaml
 - if:
     - condition: device
         type: is_on
