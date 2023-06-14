@@ -1,14 +1,14 @@
 # Site settings
 title: Blog | Matthew Palmer
 description: 'DevOps and Automation focused blog that enforces the need to limit manual work.'
-url: 'https://matthew-palmer.github.io'
-baseurl: 'https://matthew-palmer.github.io'
+url: 'https://blog.devopspalmer.com'
+baseurl: 'https://blog.devopspalmer.com'
 google_analytics: 'UA-149875063-1'
 disqus_shortname: 'mattzone-github-io'
 
 author:
   name: 'Matthew Palmer'
-  email: 
+  email: 'matt@devopspalmer.com'
   twitter_username: DevopsPalmer
   facebook_username: 
   github_username:  matthew-palmer
